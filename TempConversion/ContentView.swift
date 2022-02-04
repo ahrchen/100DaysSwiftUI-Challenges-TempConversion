@@ -13,6 +13,8 @@ struct ContentView: View {
     @State private var convertUnit: UnitTemperature = .celsius
     @State private var toUnit: UnitTemperature = .kelvin
     @State private var convertDegrees: Double = 0.0
+    @FocusState private var convertUnitIsFocused: Bool
+
     
     private var toDegrees: Measurement<UnitTemperature>{
         let inputValue  = Measurement(value: convertDegrees, unit: convertUnit)
@@ -48,6 +50,7 @@ struct ContentView: View {
                     }
                     TextField("Convert", value: $convertDegrees, format: .number)
                         .keyboardType(.decimalPad)
+                        .focused($convertUnitIsFocused)
                 }
                 Section {
                     Picker("To", selection: $toUnit) {
@@ -59,6 +62,15 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Temp Conversion")
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    
+                    Button("Done") {
+                        convertUnitIsFocused = false
+                    }
+                }
+            }
         }
     }
 }
